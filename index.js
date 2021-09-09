@@ -4,17 +4,18 @@ const { dbConnection } = require("./database/config"); // la exportacion es un o
 const app = express(); //Crea una aplicación Express. La función express () es una función de nivel superior exportada por el módulo express.
 const cors = require("cors"); //implementamos el paquete de la configuracion de peticiones al servidor
 
+//TODO:Middlewares
 // Configuracion de CORS
 app.use(cors());
+// Lectura y parseo del body
+app.use(express.json()); //para poder leer json
 // Base de datos
 dbConnection();
 
-app.get("/", (req, res) => {
-  res.status(400).json({
-    ok: true,
-    msg: "Hola mundo",
-  });
-});
+//Rutas
+
+app.use("/api/usuarios", require("./routes/usuarios.routes")); //cuando la aplicacion use ese path, vamos a requerir el archivo en el path indicado
+app.use("/api/login", require("./routes/auth.routes"));
 
 app.listen(process.env.PORT, () => {
   console.log("Servidor corriendo en puerto", +process.env.PORT);
