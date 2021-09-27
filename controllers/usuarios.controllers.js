@@ -10,11 +10,21 @@ const { generarJWT } = require("../helpers/jwt");
 
 // TODO: Controlador GET
 const getUsuarios = async (req, res) => {
-  const usuarios = await Usuario.find({}, "nombre email role google"); //find:Crea una consulta de búsqueda: obtiene una lista de documentos que coinciden con el filtro. si no se le pone filtro nos trae toda la info de la coleccion
+  const desde = Number(req.query.desde) || 0; //esto busca "desde en mi url el parametro "desde" y en ella el valor que contenga"
+  // const usuarios = await Usuario.find({}, "nombre email role google")
+  //   .skip(desde)
+  //   .limit(5); //find:Crea una consulta de búsqueda: obtiene una lista de documentos que coinciden con el filtro. si no se le pone filtro nos trae toda la info de la coleccion, skio(): numero de documentos a omitir
+  // const total = await Usuario.count();
+
+  const [usuarios, total] = await Promise.all([
+    Usuario.find({}, "nombre email role google img").skip(desde).limit(5),
+    Usuario.countDocuments(),
+  ]);
   res.json({
     ok: true,
     usuarios,
-    uid: req.uid, // lo curioso de esto, es que es a uid del usuario que hizo la peticion, Nota importante, ya que es un middleware, gracias a esto impediremos que cualquier persona haga una peticion a la base, salvo tenga un token que exista dentro de ella
+    total,
+    // uid: req.uid, lo curioso de esto, es que es a uid del usuario que hizo la peticion, Nota importante, ya que es un middleware, gracias a esto impediremos que cualquier persona haga una peticion a la base, salvo tenga un token que exista dentro de ella
   });
 };
 // TODO:Controlador POST
