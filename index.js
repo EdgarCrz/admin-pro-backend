@@ -12,6 +12,9 @@ app.use(express.json()); //para poder leer json
 // Base de datos
 dbConnection();
 
+// Directorio Publico
+app.use(express.static("public"));
+
 //Rutas
 
 app.use("/api/usuarios", require("./routes/usuarios.routes")); //cuando la aplicacion use ese path, vamos a requerir el archivo en el path indicado
