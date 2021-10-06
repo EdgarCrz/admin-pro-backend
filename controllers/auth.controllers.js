@@ -85,7 +85,20 @@ const googleSignIn = async (req, res = response) => {
   }
 };
 
+const renewToken = async (req, res = response) => {
+  const uid = req.uid;
+
+  // Generar el TOKEN - JWT
+  const token = await generarJWT(uid); // si el usuario ya existia, quiere decir que ya tiene un id, entonces lo usamos para generat el jwt. en caso de que sea la primera vez que entra, en el paso anterior,al guardarlo en automatico tambien se le genera un token
+
+  res.json({
+    ok: true,
+    token,
+  });
+};
+
 module.exports = {
   login,
   googleSignIn,
+  renewToken,
 };

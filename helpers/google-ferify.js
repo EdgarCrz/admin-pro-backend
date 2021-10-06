@@ -13,15 +13,10 @@ const googleVerify = async (token) => {
     //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
   });
   const payload = ticket.getPayload(); //guardamos en payload lo que obtenemos de ticket en su metodo "traer payload()", recordemos que en el payload viene la informacion basica del usuario
-  const userid = payload["sub"];
-
-  console.log(payload); //imprimimos todo la info
 
   const { name, email, picture } = payload; // desestructuramos la informacion del usuario
 
   return { name, email, picture }; // la retornamos para poder usarla en el controlador
-  // If request specified a G Suite domain:
-  // const domain = payload['hd'];
 };
 
 module.exports = { googleVerify };

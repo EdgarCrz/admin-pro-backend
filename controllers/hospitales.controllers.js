@@ -28,18 +28,72 @@ const crearHospital = async (req, res = response) => {
   }
 };
 
-const actualizarHospital = (req, res = response) => {
-  res.json({
-    ok: true,
-    msg: "Actualizar ",
-  });
+// Actualizar hospital
+
+const actualizarHospital = async (req, res = response) => {
+  const id = req.params.id;
+  const uid = req.uid; // este lo obtenemos al pasarlo por el "validarJWT"
+
+  try {
+    const hospital = await Hospital.findById(id);
+
+    if (!hospital) {
+      return res.status(404).json({
+        ok: false,
+        msg: "No se encontro el hospital por es id",
+      });
+    }
+    // De la siguiente manera es por si llegamos a actualizar mas campos y que no se vea raro,
+    const cambiosHospital = {
+      ...req.body, // extraermos todo lo de la req.body,
+      usuario: uid, // declaramos que la "propiedad del modelo usuario"  ahora va a tener este id, que es el que nos da la validacion del token, para ver quien hizo el cambio
+    };
+    // para actualizar usamos "findByIdAndUpdate" con el buscamos con el id que ya verificamos, y despues los parametros que van a ser modificados, y por ultimo una opcion para que al consultar me devuelva los valores nuevos
+    const hospitalActualizado = await Hospital.findByIdAndUpdate(
+      id,
+      cambiosHospital,
+      { new: true }
+    );
+    res.json({
+      ok: true,
+      hospital: hospitalActualizado,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Hable con el administrador",
+    });
+  }
 };
 
-const borrarHospital = (req, res = response) => {
-  res.json({
-    ok: true,
-    msg: "Borrar ",
-  });
+// Borrar Hospital
+
+const borrarHospital = async (req, res = response) => {
+  const id = req.params.id;
+
+  try {
+    const hospital = await Hospital.findById(id);
+
+    if (!hospital) {
+      return res.status(404).json({
+        ok: false,
+        msg: "No se encontro el hospital por es id",
+      });
+    }
+    await Hospital.findByIdAndDelete(id);
+
+    res.json({
+      ok: true,
+      msg: "Hospital borrado",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Hable con el administrador",
+    });
+  }
 };
 
 module.exports = {
