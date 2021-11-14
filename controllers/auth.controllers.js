@@ -20,6 +20,10 @@ const login = async (req, res = response) => {
 
     // Verificar contraseña
     const validPassword = bcrypt.compareSync(password, usuarioDB.password);
+    // En caso de coincidir validPassword = true
+    // En caso de NO coincidir validPassword = FALSE
+
+    //para ejecutar esto se necesita un true, por ende si no machan necitamos negar el false para convertirlo en true y mostrar el error
     if (!validPassword) {
       return res.status(400).json({
         ok: false,
@@ -45,6 +49,7 @@ const googleSignIn = async (req, res = response) => {
   const googleToken = req.body.token;
 
   try {
+    // "googleVerify" es un helper
     const { name, email, picture } = await googleVerify(googleToken); // de la funcion desestructuramos lo que nos mandamos en el return y ahora ya podemos hacer uso de esta informacion
 
     // Verificar si ya existe un usuario con el email en la base
@@ -86,14 +91,19 @@ const googleSignIn = async (req, res = response) => {
 };
 
 const renewToken = async (req, res = response) => {
-  const uid = req.uid;
+  const uid = req.uid;// esto lo tenemos porque ya pasamos por el validarToken
 
-  // Generar el TOKEN - JWT
+  // Generar nuevo TOKEN - JWT
   const token = await generarJWT(uid); // si el usuario ya existia, quiere decir que ya tiene un id, entonces lo usamos para generat el jwt. en caso de que sea la primera vez que entra, en el paso anterior,al guardarlo en automatico tambien se le genera un token
+
+  // Obtener el usuario
+
+  const usuario = await Usuario.findById(uid); // esto con el fin de mandar como respuesta la informacion del usuario
 
   res.json({
     ok: true,
     token,
+    usuario,
   });
 };
 

@@ -89,7 +89,7 @@ const retornaImagen = (req, res = response) => {
     res.sendFile(pathImg);
   } else {
     // Imagen por defecto
-    const pathImg = path.join(__dirname, `../uploads/no-image-box.png`);
+    const pathImg = path.join(__dirname, `../uploads/no-image-box.jpg`);
     res.sendFile(pathImg);
   }
 };

@@ -85,7 +85,16 @@ const actualizarUsuario = async (req, res = response) => {
     }
 
     // actualizaciones
-    campos.email = email;
+    // Con esto evitamos la modificacion de email si esta fue una autenticacion de google, tambien validamos la posibilidad de que mostrar un error en caso de que intentasen cambiar el correo para que le mande un mensaje de error
+    if (!usuarioDB.google) {
+      campos.email = email;
+    } else if (usuarioDB.email !== email) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Usuario de google no pueden cambiar su correo",
+      });
+    }
+
     const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, {
       new: true,
     });

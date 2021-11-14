@@ -1,5 +1,6 @@
 const { response } = require("express");
 const jwt = require("jsonwebtoken");
+
 const validarJWT = (req, res = response, next) => {
   // Leer el token
 

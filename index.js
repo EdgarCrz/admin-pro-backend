@@ -7,6 +7,9 @@ const cors = require("cors"); //implementamos el paquete de la configuracion de 
 //TODO:Middlewares
 // Configuracion de CORS
 app.use(cors());
+app.get("/products/:id", function (req, res, next) {
+  res.json({ msg: "This is CORS-enabled for all origins!" });
+});
 // Lectura y parseo del body
 app.use(express.json()); //para poder leer json
 // Base de datos

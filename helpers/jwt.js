@@ -14,7 +14,7 @@ const generarJWT = (uid) => {
       {
         expiresIn: "24h",
       },
-      //   como cuarto propiedad será un callback que nos devolvera ya sea un error o el token creado, esto es una funcion sincrona por lo cual se ejecuta al instante, por otro lado nosotros ocupamos que esto sea una funsion asyncrona puesto que la creacion de el JWT tome unos segundos necesitamos manejar esto con una promesa  para poder usar async y await
+      //   como cuarta propiedad será un callback que nos devolvera ya sea un error o el token creado, esto es una funcion sincrona por lo cual se ejecuta al instante, por otro lado nosotros ocupamos que esto sea una funcion asyncrona puesto que la creacion de el JWT tome unos segundos necesitamos manejar esto con una promesa  para poder usar async y await
       (err, token) => {
         if (err) {
           console.log(err);
