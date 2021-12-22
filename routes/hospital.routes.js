@@ -17,7 +17,7 @@ const {
 const router = Router();
 
 // Ruta Traer
-router.get("/", getHospitales);
+router.get("/", validarJWT, getHospitales);
 
 // Ruta Crear
 router.post(

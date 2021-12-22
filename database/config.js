@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose");// libreria de node para escribir consultas  para una base de datos de mongoDB: VALIDACIONES CONSCTRUCCION DE QUERIS MIDDLEWARES
 
 // Creamos la conexion de manera asincrona mas info en 96 del avanzado
 const dbConnection = async () => {

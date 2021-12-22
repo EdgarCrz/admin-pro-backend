@@ -12,11 +12,12 @@ const {
   crearMedicos,
   actualizarMedicos,
   borrarMedicos,
+  getMedicoById,
 } = require("../controllers/medicos.controllers");
 
 const router = Router();
 // Trer medicos
-router.get("/", getMedicos);
+router.get("/", validarJWT, getMedicos);
 // Crear medicos
 router.post(
   "/",
@@ -28,6 +29,7 @@ router.post(
   ],
   crearMedicos
 );
+// para actualizar medicos
 router.put(
   "/:id",
   [
@@ -38,6 +40,10 @@ router.put(
   ],
   actualizarMedicos
 );
+// Borrar medicos
 router.delete("/:id", validarJWT, borrarMedicos);
+
+// Traer un medico de manera individual, lo necesario para estro va a ser el :id en este caso va a ser el paremtro que venga al final de la url
+router.get("/:id", validarJWT, getMedicoById); // tambien necesitamos pasarle el jwt y despues de verificar que tenga eso podemos pasar a nuestro controlador
 
 module.exports = router;
