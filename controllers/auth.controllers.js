@@ -3,6 +3,7 @@ const { response } = require("express");
 const Usuario = require("../models/usuario.model");
 const { generarJWT } = require("../helpers/jwt");
 const { googleVerify } = require("../helpers/google-ferify");
+const { getMenuFrontEnd } = require("../helpers/menu-frontend");
 
 const login = async (req, res = response) => {
   const { email, password } = req.body;
@@ -35,6 +36,7 @@ const login = async (req, res = response) => {
     res.json({
       ok: true,
       token,
+      menu: getMenuFrontEnd(usuarioDB.role) //en cada login el usuario va a obtener las rutas a las cuales tiene acceso
     });
   } catch (error) {
     console.log(error);
@@ -81,6 +83,7 @@ const googleSignIn = async (req, res = response) => {
       ok: true,
       msg: "Google SignIn",
       token,
+      menu: getMenuFrontEnd(usuario.role) //en cada login el usuario va a obtener las rutas a las cuales tiene acceso
     });
   } catch (error) {
     res.status(401).json({
@@ -104,6 +107,7 @@ const renewToken = async (req, res = response) => {
     ok: true,
     token,
     usuario,
+    menu: getMenuFrontEnd(usuario.role) //en cada login el usuario va a obtener las rutas a las cuales tiene acceso
   });
 };
 

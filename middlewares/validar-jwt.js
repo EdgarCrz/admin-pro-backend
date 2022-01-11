@@ -1,5 +1,6 @@
 const { response } = require("express");
 const jwt = require("jsonwebtoken");
+const Usuario = require("../models/usuario.model");
 
 const validarJWT = (req, res = response, next) => {
   // Leer el token
@@ -25,6 +26,71 @@ const validarJWT = (req, res = response, next) => {
   }
 };
 
+// Creamos esta funcion para hacer una validacion de el role, como estos dos metodos tienen similitudes, y ambos son de autentificacion no hay problema de meterlos dentro de el mismo archivo
+// TODO: ESTO ES UN MIDDLEWARE bueno ambos lo son, son codigos que se ejecutan para realizar validaciones
+// El next sirve para diferenciar entre un middleware y un contralador normal, ambas son similares
+const validarADMIN_ROLE = async (req, res = response, next) => {
+  // el uid se encuentra en la req porque se establecio en el validarJWT y como en ese punto ya estamos validados tendremos esa informacion
+  const uid = req.uid;
+  try {
+    const usuarioDB = await Usuario.findById(uid);
+
+    if (!usuarioDB) {
+      return res.status(404).json({
+        ok: false,
+        msg: "El usuario no exite",
+      });
+    }
+
+    if (usuarioDB.role !== "ADMIN_ROLE") {
+      return res.status(403).json({
+        ok: false,
+        msg: "No tienes los privilegios para realizar esta acción",
+      });
+    }
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Hable con el administrador",
+    });
+  }
+};
+
+const validarADMIN_ROLE_o_MismoUsuario = async (req, res = response, next) => {
+  // el uid se encuentra en la req porque se establecio en el validarJWT y como en ese punto ya estamos validados tendremos esa informacion
+  const uid = req.uid;
+  const id = req.params.id;
+  try {
+    const usuarioDB = await Usuario.findById(uid);
+
+    if (!usuarioDB) {
+      return res.status(404).json({
+        ok: false,
+        msg: "El usuario no exite",
+      });
+    }
+// Si el usuario es un ADMIN O si el id de los params es igual al  uid de el usuario dentro de la base entonces quiere decir que este usuario si puede generar este cambio
+    if (usuarioDB.uid === "ADMIN_ROLE" || id === uid) {
+      next();
+    } else {
+      return res.status(403).json({
+        ok: false,
+        msg: "No tienes los privilegios para realizar esta acción",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Hable con el administrador",
+    });
+  }
+};
+
 module.exports = {
   validarJWT,
+  validarADMIN_ROLE,
+  validarADMIN_ROLE_o_MismoUsuario,
 };
