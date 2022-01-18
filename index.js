@@ -3,6 +3,8 @@ require("dotenv").config(); //Esto busca el archivo .env,y con el podemos usar s
 const { dbConnection } = require("./database/config"); // la exportacion es un objeto, por eso debemos desestructurarlo para sacar exactamente lo que queremos ya que en las exportaciones pueden venir mas funciones ademas de la conexion
 const app = express(); //Crea una aplicación Express. La función express () es una función de nivel superior exportada por el módulo express.
 const cors = require("cors"); //implementamos el paquete de la configuracion de peticiones al servidor
+const path = require('path');
+const res = require("express/lib/response"); // para que las rutas funcionen bien con
 
 //TODO:Middlewares
 // Configuracion de CORS
@@ -26,6 +28,14 @@ app.use("/api/hospitales", require("./routes/hospital.routes"));
 app.use("/api/medicos", require("./routes/medicos.routes"));
 app.use("/api/todo", require("./routes/busquedas.routes"));
 app.use("/api/upload", require("./routes/uploads.routes"));
+
+
+// Lo ultimo
+app.get('*', (req, resp) => {
+  resp.sendFile( path.resolve(__dirname, 'public/index.html'))
+})
+
+
 app.listen(process.env.PORT, () => {
   console.log("Servidor corriendo en puerto", +process.env.PORT);
 });
