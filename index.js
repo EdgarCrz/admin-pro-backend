@@ -31,8 +31,12 @@ app.use("/api/upload", require("./routes/uploads.routes"));
 
 
 // Lo ultimo
+
+
+// Cualquier peticion que no este incluida dentro de las rutas de arriba va a caer aqui
+// voy a responder a mi index.html que es mi aplicacion Angular
 app.get('*', (req, resp) => {
-  resp.sendFile( path.resolve(__dirname, 'public/index.html'))
+  resp.sendFile( path.resolve(__dirname, 'public/index.html')); // Basicamente indicamos que cualquier peticion que no sea una de las de arriba vamos a contestar con nuestro index.html
 })
 
 
