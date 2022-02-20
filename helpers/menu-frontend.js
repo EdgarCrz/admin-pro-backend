@@ -4,11 +4,9 @@
 
 // Y si el role es un ADMIN_ROLE se le agregara este objeto con la ruta
 //Al final de este metodo retornamos el "menu" que es el objeto con todas nuestras rutas que deseamos que ese usuario tenga acceso
-
-
-
 // Por en caso de no recibir un rol, el rol por defecto será "USER_ROLE"
 const getMenuFrontEnd = (role = "USER_ROLE") => {
+  
   const menu = [
     // Este objeto, era el mismo que teniamos en el lado del frontend, y lo reusamos aqui para despues mandarlo al mismo lugar donde estaba el otro, con la diferencia que devolveremos el menu personalizado para cada tipo de usaurio en este caso solo hicimos para el user role y para el admin role pero podemos agregar mas usuarios 
     {
